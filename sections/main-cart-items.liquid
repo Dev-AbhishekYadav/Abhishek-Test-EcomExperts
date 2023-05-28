@@ -74,7 +74,9 @@
                   <td class="cart-item__media">
                     {% if item.image %}
                       {% comment %} Leave empty space due to a:empty CSS display: none rule {% endcomment %}
-                      <a href="{{ item.url }}" class="cart-item__link" aria-hidden="true" tabindex="-1"> </a>
+                      {% unless item.product.tags contains 'gift' %}
+                        <a href="{{ item.url }}" class="cart-item__link" aria-hidden="true" tabindex="-1"> </a>
+                      {% endunless %}
                       <div class="cart-item__image-container gradient global-media-settings">
                         <img
                           src="{{ item.image | image_url: width: 300 }}"
@@ -92,8 +94,11 @@
                     {%- if settings.show_vendor -%}
                       <p class="caption-with-letter-spacing">{{ item.product.vendor }}</p>
                     {%- endif -%}
-
-                    <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
+                    {% unless item.product.tags contains 'gift' %}
+                      <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
+                    {% else %}
+                      <p class="cart-item__name h4 break">{{ item.product.title | escape }}</p>
+                    {% endunless %}
 
                     {%- if item.original_price != item.final_price -%}
                       <div class="cart-item__discounted-prices">
@@ -217,7 +222,11 @@
                     </div>
                   </td>
 
-                  <td class="cart-item__quantity">
+                  <td class="cart-item__quantity" 
+                  {% if item.product.tags contains 'gift' %} 
+                      style="visibility:hidden"
+                  {% endif %} 
+                  >
                     <div class="cart-item__quantity-wrapper">
                       <label class="visually-hidden" for="Quantity-{{ item.index | plus: 1 }}">
                         {{ 'products.product.quantity.label' | t }}

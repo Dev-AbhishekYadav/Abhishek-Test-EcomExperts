@@ -203,9 +203,14 @@
             endcapture
             assign media_index = media_index | plus: 1
           -%}
-          <li
+          {% assign alt_name = featured_media.alt | escape | handleize %}
+          {% assign variant_title =  product.selected_or_first_available_variant.title | handleize %}
+
+          <li 
             id="Slide-Thumbnails-{{ section.id }}-0{{ id_append }}"
-            class="thumbnail-list__item slider__slide{% if section.settings.hide_variants and variant_images contains featured_media.src %} thumbnail-list_item--variant{% endif %}"
+            class="thumbnail-list__item slider__slide{% if section.settings.hide_variants and variant_images contains featured_media.src %} thumbnail-list_item--variant{% endif %} {{- featured_media.alt | escape -}}
+          {%- if variant_title contains alt_name -%}{% else %} hide{%- endif -%} 
+            "
             data-target="{{ section.id }}-{{ featured_media.id }}"
             data-media-position="{{ media_index }}"
           >
@@ -243,9 +248,12 @@
               endcapture
               assign media_index = media_index | plus: 1
             -%}
+            {% assign alt_name = media.alt | escape | handleize %}
+            {% assign variant_title =  product.selected_or_first_available_variant.title | handleize | split: '-' %}
             <li
               id="Slide-Thumbnails-{{ section.id }}-{{ forloop.index }}{{ id_append }}"
-              class="thumbnail-list__item slider__slide{% if section.settings.hide_variants and variant_images contains media.src %} thumbnail-list_item--variant{% endif %}"
+              class="thumbnail-list__item slider__slide{% if section.settings.hide_variants and variant_images contains media.src %} thumbnail-list_item--variant{% endif %} {{ media.alt | escape }} 
+            {%- unless variant_title contains alt_name -%} hide {%- endunless -%}"
               data-target="{{ section.id }}-{{ media.id }}"
               data-media-position="{{ media_index }}"
             >

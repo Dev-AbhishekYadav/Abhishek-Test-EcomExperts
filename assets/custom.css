@@ -1,0 +1,24 @@
+#swatches-picker{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#swatches-picker span{
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    background-repeat: no-repeat;
+    background-size: 100% 100%, cover;
+    border: 1px solid #434242;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+#swatches-picker span.active{
+    border: 2.5px solid #1e1e1e;
+}
+
+.hide{
+    display: none;
+}

@@ -1,3 +1,7 @@
+{% if template contains 'swatches' %}
+<link rel="stylesheet" href="{{ 'custom.css' | asset_url }}"/>
+{% endif %}
+
 <section
   id="MainProduct-{{ section.id }}"
   class="page-width section-{{ section.id }}-padding"
@@ -52,6 +56,15 @@
       onload="this.media='all'"
     >
   {%- endif -%}
+
+{% if template contains 'swatches' %}
+  {% for variant in product.variants %}
+    {% if variant.metafields.custom.gift != blank %}
+      {% assign gift_product = variant.metafields.custom.gift.value %}
+      <input type="hidden" id="gift-variant--{{ variant.id }}" data-id="{{ gift_product.selected_or_first_available_variant.id }}" data-is-sellable="{{ gift_product.selected_or_first_available_variant.available }}"/>
+    {% endif %}
+  {% endfor %}
+{% endif %}
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
 
@@ -308,10 +321,18 @@
               %}
 
             {%- when 'variant_picker' -%}
-              {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+              {% if template contains 'swatches' %}
+                {% render 'product-variant-picker-swatches', product: product, block: block, product_form_id: product_form_id %}
+              {% else %}
+                {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+              {% endif %}
             {%- when 'buy_buttons' -%}
+              {% if template contains 'swatches' %}
+                {%- render 'buy-buttons-swatches', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true -%}
+              {% else %}
               {%- render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true -%}
-            {%- when 'rating' -%}
+              {% endif %}
+              {%- when 'rating' -%}
               {%- if product.metafields.reviews.rating.value != blank -%}
                 {% liquid
                   assign rating_decimal = 0
