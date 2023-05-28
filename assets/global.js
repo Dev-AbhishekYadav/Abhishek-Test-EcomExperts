@@ -828,7 +828,7 @@ class SlideshowComponent extends SliderComponent {
 customElements.define('slideshow-component', SlideshowComponent);
 
 class VariantSelects extends HTMLElement {
-  constructor() {
+  constructor() { 
     super();
     this.addEventListener('change', this.onVariantChange);
     // this.preselectFirstVariant();
