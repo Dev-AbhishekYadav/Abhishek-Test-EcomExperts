@@ -147,11 +147,31 @@ class QuantityInput extends HTMLElement {
     super();
     this.input = this.querySelector('input');
     this.changeEvent = new Event('change', { bubbles: true });
-
+    this.isGiftProduct = false;
+    this.isMainProduct = false;
+    this.giftProduct = null;
+    this.mainProduct = null;
+    this.inputGiftProduct = null;
+    if(this.hasAttribute('data-timestamp')){
+      if(!this.classList.contains('gift-product-qty')){
+        this.isMainProduct = true;
+        this.mainProduct = this;
+        this.giftProduct = document.querySelector(`[data-timestamp="${this.dataset.timestamp}"]`);
+        this.inputGiftProduct = this.giftProduct.querySelector('input');
+      }
+    }
     this.input.addEventListener('change', this.onInputChange.bind(this));
     this.querySelectorAll('button').forEach(
       (button) => button.addEventListener('click', this.onButtonClick.bind(this))
     );
+  }
+
+  changeGiftProductQty(){
+    if(this.isMainProduct){
+      this.inputGiftProduct.value = this.input.value;
+      this.inputGiftProduct.dispatchEvent(this.giftProduct.changeEvent);
+      this.inputGiftProduct.style.visibility = 'visible';
+    }
   }
 
   quantityUpdateUnsubscriber = undefined;
@@ -169,6 +189,8 @@ class QuantityInput extends HTMLElement {
 
   onInputChange(event) {
     this.validateQtyRules();
+    if(this.isMainProduct) this.inputGiftProduct.style.visibility = 'hidden';
+    setTimeout(() => this.changeGiftProductQty(), 1000);
   }
 
   onButtonClick(event) {
@@ -177,6 +199,8 @@ class QuantityInput extends HTMLElement {
 
     event.target.name === 'plus' ? this.input.stepUp() : this.input.stepDown();
     if (previousValue !== this.input.value) this.input.dispatchEvent(this.changeEvent);
+    if(this.isMainProduct) this.inputGiftProduct.style.visibility = 'hidden';
+    setTimeout(() => this.changeGiftProductQty(), 500);
   }
 
   validateQtyRules() {

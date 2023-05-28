@@ -4,10 +4,23 @@ class CartRemoveButton extends HTMLElement {
 
     this.addEventListener('click', (event) => {
       event.preventDefault();
+      console.clear();
       const cartItems = this.closest('cart-items') || this.closest('cart-drawer-items');
       cartItems.updateQuantity(this.dataset.index, 0);
+      this.isMainProduct = null;
+      this.isGiftProduct = null;
+      if(this.hasAttribute('data-timestamp-remove-btn') && this.hasAttribute('is-main-product')){
+        this.isMainProduct = true;
+        this.giftProduct = document.querySelector(`[data-timestamp-remove-btn="${this.dataset.timestampbtn}"]`);
+      }
+      setTimeout(() => this.removeGiftProduct(this.giftProduct), 250);
     });
   }
+
+  removeGiftProduct(giftProduct){
+    giftProduct.dispatchEvent(new Event('click', { bubbles: true }));
+  }
+
 }
 
 customElements.define('cart-remove-button', CartRemoveButton);

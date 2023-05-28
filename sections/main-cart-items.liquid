@@ -11,6 +11,15 @@
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
 
+  
+  .is-gift-product{
+    pointer-events: none;
+  }
+
+  .gift-product-qty-wrapper .cart-item__error{
+    display: none;
+  }
+
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top }}px;
@@ -222,24 +231,36 @@
                     </div>
                   </td>
 
-                  <td class="cart-item__quantity" 
-                  {% if item.product.tags contains 'gift' %} 
-                      style="visibility:hidden"
-                  {% endif %} 
-                  >
+                  <td class="cart-item__quantity {% if item.product.tags contains 'gift' %} gift-product-qty-wrapper{%- endif -%}">
                     <div class="cart-item__quantity-wrapper">
                       <label class="visually-hidden" for="Quantity-{{ item.index | plus: 1 }}">
                         {{ 'products.product.quantity.label' | t }}
                       </label>
-                      <quantity-input class="quantity cart-quantity">
-                        <button class="quantity__button no-js-hidden" name="minus" type="button">
+                      <quantity-input class="quantity cart-quantity {% if item.product.tags contains 'gift' %} gift-product-qty{%- endif -%}"
+                      
+                      {%- for property in item.properties -%}
+                        {%- if property.first == '_key' -%}
+                          data-timestamp="{{ property.last }}"
+                        {%- endif -%}
+                      {%- endfor -%}
+
+                      >
+                        <button class="quantity__button no-js-hidden" name="minus" type="button"
+                        {% if item.product.tags contains 'gift' %} 
+                          style="visibility:hidden"
+                        {% endif %}
+                        >
                           <span class="visually-hidden">
                             {{- 'products.product.quantity.decrease' | t: product: item.product.title | escape -}}
                           </span>
                           {% render 'icon-minus' %}
                         </button>
                         <input
-                          class="quantity__input"
+                          class="quantity__input
+                            {% if item.product.tags contains 'gift' %} 
+                              is-gift-product
+                            {% endif %}
+                          "
                           data-quantity-variant-id="{{ item.variant.id }}"
                           type="number"
                           name="updates[]"
@@ -255,8 +276,15 @@
                           aria-label="{{ 'products.product.quantity.input_label' | t: product: item.product.title | escape }}"
                           id="Quantity-{{ item.index | plus: 1 }}"
                           data-index="{{ item.index | plus: 1 }}"
+                          {% if item.product.tags contains 'gift' %} 
+                            readonly
+                          {% endif %}
                         >
-                        <button class="quantity__button no-js-hidden" name="plus" type="button">
+                        <button class="quantity__button no-js-hidden" name="plus" type="button" 
+                          {% if item.product.tags contains 'gift' %} 
+                            style="visibility:hidden"
+                          {% endif %}
+                        >
                           <span class="visually-hidden">
                             {{- 'products.product.quantity.increase' | t: product: item.product.title | escape -}}
                           </span>
@@ -264,7 +292,21 @@
                         </button>
                       </quantity-input>
 
-                      <cart-remove-button
+                      <cart-remove-button 
+
+                      {% for property in item.properties %}
+                        {%- if property.first == '_key' -%}
+                          data-timestamp-remove-btn="{{ property.last }}" data-timestampbtn="{{ property.last }}"
+                          {% assign has_timestamp = true %}
+                        {%- endif -%}
+                      {%- endfor -%}
+
+                      {% if item.product.tags contains 'gift' and has_timestamp %} 
+                        is-gift-product
+                        style="visibility:hidden"
+                      {% elsif has_timestamp %}
+                        is-main-product
+                      {% endif %}
                         id="Remove-{{ item.index | plus: 1 }}"
                         data-index="{{ item.index | plus: 1 }}"
                       >
