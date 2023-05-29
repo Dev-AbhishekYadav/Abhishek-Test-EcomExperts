@@ -1042,6 +1042,8 @@ class VariantSelectsSwatches extends HTMLElement {
     this.addEventListener('change', this.onVariantChange);
     this.preselectFirstVariant();
     this.addEventToSwatches();
+    this.addToCartForm = document.querySelector('product-form-swatches form');
+    console.log('clicked');
   }
 
   addEventToSwatches(){
@@ -1069,6 +1071,9 @@ class VariantSelectsSwatches extends HTMLElement {
     setTimeout(() => {
       this.querySelector('[name="options[Size]"]').value = 'Unselected';
       this.dispatchEvent(new Event('change', { bubbles: true }));
+      ['button[type="submit"]', '.shopify-payment-button__button'].forEach(selector => {
+        document.querySelector('.product-form__buttons').querySelector(selector).setAttribute('aria-disabled', true);
+      })
     }, 1000)
   }
 
@@ -1089,6 +1094,20 @@ class VariantSelectsSwatches extends HTMLElement {
       this.updateVariantInput();
       this.renderProductInfo();
       this.updateShareUrl();
+    }
+    
+    let currentVariantId = this.addToCartForm.querySelector('[name="id"]').value;
+    let currentVariantTitle = document.getElementById(`variant--${currentVariantId}`).dataset.title;
+    console.log(document.querySelector('.product-form__buttons').querySelector('.shopify-payment-button__button'));
+    if(currentVariantTitle.includes('Unselected')){
+      document.querySelector('.product-form__buttons').querySelector('button[type="submit"]').setAttribute('aria-disabled', true);
+      document.querySelector('.product-form__buttons').querySelector('[data-shopify="payment-button"]').style.pointerEvents = 'none';
+    }
+    else{
+      if(document.getElementById(`variant--${currentVariantId}`).dataset.available == "true"){
+        document.querySelector('.product-form__buttons').querySelector('button[type="submit"]').removeAttribute('aria-disabled');
+        document.querySelector('.product-form__buttons').querySelector('[data-shopify="payment-button"]').style.pointerEvents = '';
+      }
     }
   }
 
