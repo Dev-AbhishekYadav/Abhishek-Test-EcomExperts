@@ -59,6 +59,7 @@
 
 {% if template contains 'swatches' %}
   {% for variant in product.variants %}
+    <input type="hidden" id="variant--{{ variant.id }}" data-title="{{ variant.title }}" data-available="{{ variant.available }}"/>
     {% if variant.metafields.custom.gift != blank %}
       {% assign gift_product = variant.metafields.custom.gift.value %}
       <input type="hidden" id="gift-variant--{{ variant.id }}" data-id="{{ gift_product.selected_or_first_available_variant.id }}" data-is-sellable="{{ gift_product.selected_or_first_available_variant.available }}"/>
