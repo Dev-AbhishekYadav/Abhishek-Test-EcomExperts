@@ -140,10 +140,10 @@ if (!customElements.get('product-form-swatches')) {
 
       fetch(`${routes.cart_add_url}`, config)
         .then((response) => response.json())
-        .then(async (response) => {
+        .then((response) => {
           if(this.hasGiftProduct){
             const giftProduct = document.getElementById(`gift-variant--${this.form.querySelector('[name="id"]').value}`);
-            await this.addGiftProductToCart(
+            this.addGiftProductToCart(
               {
                 'id': giftProduct.dataset.id,
                 'quantity': document.querySelector('.quantity__input') ? document.querySelector('.quantity__input').value : 1,
@@ -210,9 +210,9 @@ if (!customElements.get('product-form-swatches')) {
       }
     }
 
-    async addGiftProductToCart(giftProduct){
+    addGiftProductToCart(giftProduct){
       const productData = JSON.stringify({'items': [giftProduct]});
-      const result = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+      fetch(window.Shopify.routes.root + 'cart/add.js', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -229,7 +229,6 @@ if (!customElements.get('product-form-swatches')) {
       .finally(() => {
         console.log('Gift Card modified');
       })
-      return result;
     }
   });
 }
