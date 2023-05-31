@@ -229,7 +229,6 @@ if (!customElements.get('product-form-swatches')) {
       .finally(() => {
         console.log('Gift Card modified');
       })
-      return result;
     }
   });
 }
