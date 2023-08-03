@@ -139,6 +139,17 @@
           "color_scheme": "background-1"
         }
       }
+    },
+    "content_for_index": [
+
+    ],
+    "blocks": {
+      "6048552914641687618": {
+        "type": "shopify:\/\/apps\/webrex-currency-converter\/blocks\/app-embed\/065e70d9-d1e0-4d56-a8a3-a58701e43093",
+        "disabled": false,
+        "settings": {
+        }
+      }
     }
   },
   "presets": {
