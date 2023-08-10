@@ -144,10 +144,31 @@
 
     ],
     "blocks": {
-      "6048552914641687618": {
-        "type": "shopify:\/\/apps\/webrex-currency-converter\/blocks\/app-embed\/065e70d9-d1e0-4d56-a8a3-a58701e43093",
+      "1386531382474587334": {
+        "type": "shopify:\/\/apps\/bundle-builder\/blocks\/bb-cart-integration\/78802baf-205d-4d1d-908c-fae911f24e36",
         "disabled": false,
         "settings": {
+          "hide_accelerated_checkout": true,
+          "placement": "below",
+          "hide_empty_line_items": false,
+          "font_size": 16,
+          "font_color": "",
+          "button_color": "",
+          "button_background": "",
+          "button_radius": 0,
+          "border_color": "#000000",
+          "background": "",
+          "heading": "Your cart contains {count} bundle",
+          "heading_plural": "Your cart contains {count} bundles",
+          "view_text": "View Details",
+          "modal_title": "Your bundle summary",
+          "modal_font_color": "#000000",
+          "modal_background": "#FFFFFF",
+          "modal_border_color": "#C4C4C4",
+          "modal_item_background": "",
+          "modal_item_content_background": "#F1F1F1",
+          "modal_item_product_background": "#FFFFFF",
+          "custom_css": ""
         }
       }
     }
